@@ -1,8 +1,26 @@
 import { Router } from "express";
+import methodOverride from "method-override";
 import path from "path";
+import config from "../config/main.js";
 import news from "../models/news.js";
+
 const __dirname = path.resolve();
 const router = Router();
+
+router.use(methodOverride("X-HTTP-Method")); //          Microsoft
+router.use(methodOverride("X-HTTP-Method-Override")); // Google/GData
+router.use(methodOverride("X-Method-Override")); //      IBM
+
+router.use(
+  methodOverride((req, res) => {
+    if (req.body && typeof req.body === "object" && "_method" in req.body) {
+      // look in urlencoded POST bodies and delete it
+      const method = req.body._method;
+      delete req.body._method;
+      return method;
+    }
+  })
+);
 
 router
   .route("/news")
@@ -10,13 +28,44 @@ router
     res.send(news);
   })
   .post((req, res) => {
-    news.push(req.body);
-    res.redirect("/news");
+    news.sort((n1, n2) => {
+      if (n1.id < n2.id) return -1;
+      else if (n1.id > n2.id) return 1;
+      else return 0;
+    });
+    let el = req.body;
+    el.id = news[news.length - 1].id + 1;
+    console.log(el);
+    news.push(el);
+    console.log(news);
+    res.redirect("/");
   });
 
-router.route("/news/:id").get((req, res) => {
-  res.send(news[req.params.id - 1]);
-});
+router
+  .route("/news/:id")
+  .get((req, res) => {
+    const result = news.find((item) => req.params.id == item.id);
+    res.send(result);
+  })
+  .delete((req, res) => {
+    console.log(req.method);
+    const toDelete = news.find((n) => n.id == req.params.id);
+    if (toDelete) {
+      news.splice(news.indexOf(toDelete), 1);
+    }
+    res.redirect("/");
+  })
+  .put((req, res) => {
+    if (req.body.id === undefined) {
+      const toEdit = news.find((n) => n.id == req.params.id);
+      if (toEdit) {
+        const index = news.indexOf(toEdit);
+        news[index].title = req.body.title;
+        news[index].text = req.body.text;
+      }
+    }
+    res.redirect("/");
+  });
 
 router
   .route("/")
@@ -38,11 +87,11 @@ router
   });
 
 router.get("/about", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "views", "about.html"));
+  res.sendFile(path.resolve(__dirname, config.views, "about.html"));
 });
 
 router.get("/posts", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "views", "posts.html"));
+  res.sendFile(path.resolve(__dirname, config.views, "posts.html"));
 });
 
 /*

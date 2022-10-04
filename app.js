@@ -2,11 +2,14 @@ import express from "express";
 import path from "path";
 import router from "./routes/routes.js";
 import bodyParser from "body-parser";
+
 import ejs from "ejs";
 //import timeFix from "./middleware.js";
 const app = express();
 const __dirname = path.resolve();
-const PORT = process.env.PORT ?? 3000;
+app.set("view", "views");
+app.set("port", 3000);
+const PORT = process.env.PORT || app.get("port");
 
 //app.use(timeFix);
 app.use(bodyParser.json());

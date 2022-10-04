@@ -70,9 +70,25 @@
       <input type="text" name="text" />
       <button type="submit">Add</button>
     </form>
+
     <ul>
       <% news.forEach((n) => { %>
-      <li><%= n.title %></li>
+      <li>
+        <a href="/news/<%= n.id %>"><%= n.title %></a>
+        <form method="POST" action="/news/<%= n.id %>">
+          <input type="hidden" name="_method" value="DELETE" />
+          <button type="submit">delete</button>
+        </form>
+        <form method="POST" action="/news/<%= n.id %>">
+          <input type="hidden" name="_method" value="PUT" />
+          <label for="">Title</label>
+          <input type="text" name="title" value="<%= n.title %>" />
+          <label for="">Text</label>
+          <input type="text" name="text" value="<%= n.text %>" />
+          <button type="submit">update</button>
+        </form>
+        <br /><br />
+      </li>
       <% })%>
     </ul>
   </body>
