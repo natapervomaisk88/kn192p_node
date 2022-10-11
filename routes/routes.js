@@ -25,7 +25,7 @@ router.use(
 router
   .route("/news")
   .get((req, res) => {
-    res.send(news);
+    res.render("posts");
   })
   .post((req, res) => {
     news.sort((n1, n2) => {
@@ -70,7 +70,11 @@ router
 router
   .route("/")
   .get((req, res) => {
-    res.render("index", { title: "EJS", news: news });
+    res.render("index", {
+      title: "EJS",
+      news: news,
+      username: req.signedCookies.username,
+    });
     // res.format({
     //   html: res.render("index.ejs", { title: "My page(ejs)" }),
     // });
@@ -94,6 +98,33 @@ router.get("/posts", (req, res) => {
   res.render("posts", { title: "Posts" });
 });
 
+router
+  .route("/register")
+  .get((req, res) => {
+    res.render("register", { title: "Registration" });
+  })
+  .post((req, res) => {
+    const { login, email, password, password_repeat, is_remember } = req.body;
+    if (password === password_repeat) {
+      //сравним пароли
+      //нет ли уже такого пользователя (login, email)
+      //regex for email
+      // login не менее 5 символов
+      if (is_remember) {
+        res.cookie("username", login, {
+          maxAge: 3600 * 24, //час життя куки
+          signed: true,
+        });
+      }
+    }
+    res.redirect("/");
+  });
+router.route("/logout").get((req, res) => {
+  if (req.signedCookies.username) {
+    res.clearCookie("username");
+  }
+  res.redirect("/");
+});
 /*
 GET  /news - отримати всі новини
 POST /news - додавати новину

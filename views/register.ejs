@@ -1,0 +1,60 @@
+<% layout('layouts/main.ejs') -%>
+<div class="w-25 m-auto">
+  <form method="POST" action="/register">
+    <div class="form-group">
+      <label for="exampleInputLogin">Login</label>
+      <input
+        name="login"
+        type="text"
+        class="form-control"
+        id="exampleInputLogin"
+        placeholder="Enter login"
+      />
+      <small id="emailHelp" class="form-text text-muted"
+        >We'll never share your email with anyone else.</small
+      >
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input
+        name="email"
+        type="email"
+        class="form-control"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        placeholder="Enter email"
+      />
+      <small id="emailHelp" class="form-text text-muted"
+        >We'll never share your email with anyone else.</small
+      >
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input
+        name="password"
+        type="password"
+        class="form-control"
+        id="exampleInputPassword1"
+        placeholder="Password"
+      />
+      <label for="exampleInputPassword2">Password Repeat</label>
+      <input
+        name="password_repeat"
+        type="password"
+        class="form-control"
+        id="exampleInputPassword2"
+        placeholder="Password Repeat"
+      />
+    </div>
+    <div class="form-check">
+      <input
+        type="checkbox"
+        class="form-check-input"
+        id="exampleCheck1"
+        name="is_remember"
+      />
+      <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Registration</button>
+  </form>
+</div>

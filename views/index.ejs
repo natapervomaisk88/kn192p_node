@@ -1,5 +1,7 @@
-<% layout('layouts/main.ejs') -%>
-<h1>Hello, I am express server (GET)</h1>
+<% layout('layouts/main.ejs') -%> 
+<% if(username) {%>
+<h1>Hello, <%= username%> <a href="/logout">Logout</a></h1>
+<%}%>
 <form action="/news" method="post">
   <label for="">Title</label>
   <input type="text" name="title" />
