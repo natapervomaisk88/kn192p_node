@@ -1,0 +1,6 @@
+const config = {
+  views: "views",
+  secret_key:
+    "your secret key",
+};
+export default config;
