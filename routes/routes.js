@@ -87,11 +87,11 @@ router
   });
 
 router.get("/about", (req, res) => {
-  res.sendFile(path.resolve(__dirname, config.views, "about.html"));
+  res.render("about", { title: "About" });
 });
 
 router.get("/posts", (req, res) => {
-  res.sendFile(path.resolve(__dirname, config.views, "posts.html"));
+  res.render("posts", { title: "Posts" });
 });
 
 /*
