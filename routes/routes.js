@@ -3,6 +3,7 @@ import methodOverride from "method-override";
 import path from "path";
 import config from "../config/main.js";
 import news from "../models/news.js";
+import { registration, auth } from "../controllers/user.controllers.js";
 
 const __dirname = path.resolve();
 const router = Router();
@@ -103,20 +104,7 @@ router
   .get((req, res) => {
     res.render("register", { title: "Registration" });
   })
-  .post((req, res) => {
-    const { login, email, password, password_repeat, is_remember } = req.body;
-    if (password === password_repeat) {
-      //сравним пароли
-      //нет ли уже такого пользователя (login, email)
-      //regex for email
-      // login не менее 5 символов
-      if (is_remember) {
-        res.cookie("username", login, {
-          maxAge: 3600 * 24, //час життя куки
-          signed: true,
-        });
-      }
-    }
+  .post(registration, (req, res) => {
     res.redirect("/");
   });
 router.route("/logout").get((req, res) => {
@@ -125,6 +113,15 @@ router.route("/logout").get((req, res) => {
   }
   res.redirect("/");
 });
+
+router
+  .route("/auth")
+  .get((req, res) => {
+    res.render("auth", { title: "Auth" });
+  })
+  .post(auth, (req, res) => {
+    res.redirect("/");
+  });
 /*
 GET  /news - отримати всі новини
 POST /news - додавати новину
