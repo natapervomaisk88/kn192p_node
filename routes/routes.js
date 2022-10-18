@@ -74,7 +74,8 @@ router
     res.render("index", {
       title: "EJS",
       news: news,
-      username: req.signedCookies.username,
+      //username: req.signedCookies.username,
+      username: req.session.username,
     });
     // res.format({
     //   html: res.render("index.ejs", { title: "My page(ejs)" }),
@@ -108,8 +109,11 @@ router
     res.redirect("/");
   });
 router.route("/logout").get((req, res) => {
-  if (req.signedCookies.username) {
-    res.clearCookie("username");
+  if (req.session.username) {
+    req.session.destroy(() => {
+      console.log("logout");
+    });
+    //res.clearCookie("username");
   }
   res.redirect("/");
 });
